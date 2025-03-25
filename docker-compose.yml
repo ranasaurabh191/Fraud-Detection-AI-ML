@@ -1,0 +1,13 @@
+services:
+  web:
+    build:
+      context: .                 # Use current directory as the build context
+      dockerfile: Dockerfile      # Use the Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./apps:/fraud_detection/apps                  # Mount the app folder
+      - ./models:/fraud_detection/models 
+      - ./data:/fraud_detection/data             # Mount models separately
+    environment:
+      - FLASK_ENV=development
