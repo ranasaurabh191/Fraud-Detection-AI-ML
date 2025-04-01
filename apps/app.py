@@ -5,7 +5,7 @@ import numpy as np # type: ignore
 import pandas as pd # type: ignore
 from flask import Flask, request, jsonify, render_template # type: ignore
 from flask_cors import CORS # type: ignore
-
+import os
 # ✅ Load the scaler
 scaler = joblib.load('./models/scaler.pkl')
 
@@ -95,4 +95,5 @@ def predict():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
