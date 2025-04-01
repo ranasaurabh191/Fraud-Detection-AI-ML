@@ -1,18 +1,19 @@
-import tensorflow.keras.losses  # type: ignore # ✅ Register the loss function
-from tensorflow.keras.models import load_model # type: ignore
-import joblib # type: ignore
-import numpy as np # type: ignore
-import pandas as pd # type: ignore
-from flask import Flask, request, jsonify, render_template # type: ignore
-from flask_cors import CORS # type: ignore
-import os
+import tensorflow as tf
+from tensorflow.keras.losses import MeanSquaredError
+from tensorflow.keras.models import load_model
+import joblib
+import numpy as np
+import pandas as pd
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
+
 # ✅ Load the scaler
 scaler = joblib.load('./models/scaler.pkl')
 
-# ✅ Register the 'mse' loss function
-custom_objects = {'mse': tensorflow.keras.losses.MeanSquaredError()}
+# ✅ Register the loss function for the autoencoder
+custom_objects = {'mse': MeanSquaredError()}
 
-# ✅ Load models with proper loss registration
+# ✅ Load models safely
 autoencoder = load_model('./models/autoencoder_model.h5', custom_objects=custom_objects)
 gbm = joblib.load('./models/gbm_model.pkl')
 xgb_model = joblib.load('./models/xgboost_model.pkl')
@@ -20,6 +21,7 @@ rf_model = joblib.load('./models/random_forest_model.pkl')
 logreg_model = joblib.load('./models/logistic_regression_model.pkl')
 mlp_model = joblib.load('./models/mlp_model.pkl')
 
+# ✅ Original feature names
 original_feature_names = [
     "Transaction Amount",
     "High-Risk Flag (0/1)",
@@ -32,8 +34,10 @@ original_feature_names = [
     "Location Anomaly (0/1)",
     "Recent Frequency"
 ]
+
 app = Flask(__name__)
 CORS(app)
+
 @app.route('/', methods=['GET'])
 def home():
     return render_template('index.html')
@@ -41,49 +45,51 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # ✅ Parse and validate input data
-        data = request.json.get('data', [])
-        
-        if not data or len(data[0]) != 10:
+        # ✅ Ensure JSON data
+        if not request.is_json:
+            return jsonify({"error": "Invalid request. Expected JSON data."}), 400
+
+        request_data = request.get_json()
+        data = request_data.get('data', [])
+
+        # ✅ Validate input format
+        if not isinstance(data, list) or not all(isinstance(row, list) for row in data):
+            return jsonify({"error": "Invalid input format. Expected a list of lists."}), 400
+        if len(data) == 0 or len(data[0]) != 10:
             return jsonify({"error": "Invalid input dimensions. Expected 10 features."}), 400
 
-        # ✅ Preprocessing
-        data = np.array(data)
-
-        # ✅ Use original feature names
+        # ✅ Convert input to DataFrame
         data_df = pd.DataFrame(data, columns=original_feature_names)
 
         # ✅ Scale the data
-        data_scaled = scaler.transform(data_df)
+        try:
+            data_scaled = scaler.transform(data_df)
+        except Exception as e:
+            return jsonify({"error": f"Data scaling failed: {str(e)}"}), 400
 
         # ✅ Helper function for safe predictions
         def safe_predict(model, X):
-            """Ensures model predictions are consistently shaped"""
             pred = model.predict(X)
-            return np.atleast_1d(pred).reshape(-1)[0]  # Ensure scalar output
+            return float(pred.flatten()[0])  # Ensure scalar output
 
-        # ✅ Model Predictions with consistent shapes
+        # ✅ Model Predictions
         gbm_pred = safe_predict(gbm, data_scaled)
         xgb_pred = safe_predict(xgb_model, data_scaled)
         rf_pred = safe_predict(rf_model, data_scaled)
         logreg_pred = safe_predict(logreg_model, data_scaled)
 
-        # ✅ MLP Prediction: Proper thresholding with safe output handling
+        # ✅ MLP Prediction
         mlp_raw_pred = np.atleast_2d(mlp_model.predict(data_scaled))  # Ensure 2D
         mlp_pred = int((mlp_raw_pred[0, 0] > 0.5))  # Thresholding
 
         # ✅ Autoencoder reconstruction error
         reconstruction = autoencoder.predict(data_scaled)
-        recon_error = np.mean(np.square(data_scaled - reconstruction))
-        autoencoder_pred = 1 if recon_error > 0.01 else 0  # Thresholding
+        recon_error = np.mean(np.square(data_scaled - reconstruction), axis=1)  # Compute per sample error
+        autoencoder_pred = int(recon_error[0] > 0.01)  # First prediction
 
-        # ✅ Debug: Print the predictions and shapes for verification
-        print("GBM Prediction:", gbm_pred, type(gbm_pred))
-        print("XGBoost Prediction:", xgb_pred, type(xgb_pred))
-        print("RF Prediction:", rf_pred, type(rf_pred))
-        print("Logistic Regression Prediction:", logreg_pred, type(logreg_pred))
-        print("MLP Prediction:", mlp_pred, type(mlp_pred))
-        print("Autoencoder Error:", recon_error, type(autoencoder_pred))
+        # ✅ Debugging Logs
+        print("Predictions:")
+        print(f"GBM: {gbm_pred}, XGBoost: {xgb_pred}, RF: {rf_pred}, LogReg: {logreg_pred}, MLP: {mlp_pred}, Autoencoder: {autoencoder_pred}")
 
         # ✅ Formatting predictions
         result = {
@@ -99,9 +105,8 @@ def predict():
 
     except Exception as e:
         import traceback
-        print("🔥 Error:", traceback.format_exc())  # Print detailed traceback for debugging
+        print("🔥 Error:", traceback.format_exc())  # Debugging traceback
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host='0.0.0.0', port=10000)
