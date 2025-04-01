@@ -21,8 +21,8 @@ logreg_model = joblib.load('./models/logistic_regression_model.pkl')
 mlp_model = joblib.load('./models/mlp_model.pkl')
 
 # ✅ Load the original feature names to ensure consistency
-original_df = pd.read_csv('./data/processed_transactions.csv')
-original_feature_names = original_df.columns[:-1][:10]  # Select the first 10 features used in training
+
+original_feature_names = ["Time", "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9"]  # Select the first 10 features used in training
 
 app = Flask(__name__)
 CORS(app)
