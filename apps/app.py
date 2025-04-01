@@ -20,10 +20,18 @@ rf_model = joblib.load('./models/random_forest_model.pkl')
 logreg_model = joblib.load('./models/logistic_regression_model.pkl')
 mlp_model = joblib.load('./models/mlp_model.pkl')
 
-# ✅ Load the original feature names to ensure consistency
-original_df = pd.read_csv('./data/processed_transactions.csv')
-original_feature_names = original_df.columns[:-1][:10]  # Select the first 10 features used in training
-
+original_feature_names = [
+    "Transaction Amount",
+    "High-Risk Flag (0/1)",
+    "Balance Ratio (0-1)",
+    "Verification (0/1)",
+    "Previous Amount",
+    "Time Since Last (hrs)",
+    "Merchant Reputation (0/1)",
+    "Credibility Score (0-1)",
+    "Location Anomaly (0/1)",
+    "Recent Frequency"
+]
 app = Flask(__name__)
 CORS(app)
 @app.route('/', methods=['GET'])
