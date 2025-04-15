@@ -1,5 +1,5 @@
 # Use official Python image
-FROM python:3.10
+FROM python:3.9
 
 # Set working directory inside the container
 WORKDIR /fraud_detection
