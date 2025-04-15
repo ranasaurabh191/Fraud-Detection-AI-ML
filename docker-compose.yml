@@ -8,6 +8,6 @@ services:
     volumes:
       - ./apps:/fraud_detection/apps                  # Mount the app folder
       - ./models:/fraud_detection/models 
-      - ./data:/fraud_detection/data             # Mount models separately
+                  # Mount models separately
     environment:
       - FLASK_ENV=development
