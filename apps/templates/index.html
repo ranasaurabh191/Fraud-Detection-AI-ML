@@ -1,264 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Fraud Detection</title>
-    <style>
-        /* 🌙 Dark Theme Styling */
-        body {
-            font-family: Arial, sans-serif;
-            background: #1e1e2f;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            scroll-behavior: smooth; /* Smooth Scrolling */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>⚡️AI/ML-Powered Fraud Detection System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Rubik&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Fonts */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        header {
-            background: linear-gradient(135deg, #4a90e2, #9013fe);
-            color: #fff;
-            padding: 25px 0;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: radial-gradient(circle at top left, #0a0a0a, #000);
+      color: #f5f5f5;
+      overflow-x: hidden;
+      padding-bottom: 100px;
+    }
 
-        .container {
-            width: 90%;
-            max-width: 1100px;
-            margin: 30px auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    header {
+      padding: 60px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #000000 40%, #0d0d0d 100%);
+      border-bottom: 2px solid #ffc10744;
+      box-shadow: 0 0 30px #ffc10733;
+    }
 
-        form {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            background: #2a2a40;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.7);
-            animation: fadeIn 0.8s ease-in-out;
-            width: 100%;
-        }
+    header h1 {
+      font-size: 3rem;
+      font-family: 'Orbitron', sans-serif;
+      color: #ffc107;
+      text-shadow: 0 0 12px #ffc107aa;
+    }
 
-        .form-group {
-            width: 48%;
-            margin-bottom: 20px;
-        }
+    .tagline {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      color: #aaa;
+    }
 
-        label {
-            font-weight: bold;
-            font-size: 15px;
-            color: #bbb;
-            display: block;
-            margin-bottom: 5px;
-        }
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 0 25px #ffc10733;
+      border: 1px solid #ffc10722;
+    }
 
-        input {
-            width: calc(100% - 20px);
-            padding: 12px;
-            border: 2px solid #4a90e2;
-            border-radius: 6px;
-            font-size: 14px;
-            color: #fff;
-            background: #1e1e2f;
-            transition: all 0.3s;
-        }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+      animation: fadeIn 1s ease-in;
+    }
 
-        input:focus {
-            border-color: #f39c12;
-            box-shadow: 0 0 12px #f39c12;
-        }
+    .form-group {
+      flex: 1 1 45%;
+    }
 
-        button {
-            width: 100%;
-            background: linear-gradient(135deg, #28a745, #218838);
-            color: #fff;
-            padding: 15px;
-            font-size: 18px;
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 5px;
+      color: #ffc107;
+      font-size: 0.95rem;
+    }
 
-        button:hover {
-            background: linear-gradient(135deg, #218838, #28a745);
-            transform: scale(1.05);
-        }
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 2px solid #ffc10755;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      transition: all 0.3s ease;
+    }
 
-        .result {
-            margin: 30px 0;
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            gap: 20px;
-            scroll-margin-top: 20px;
-        }
+    input:focus {
+      outline: none;
+      border-color: #ffc107;
+      box-shadow: 0 0 12px #ffc10788;
+    }
 
-        .card {
-            background: #2a2a40;
-            color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-            transition: transform 0.3s ease;
-            width: 30%;
-            min-width: 250px;
-            text-align: center;
-        }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 15px;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, #ffc107, #ffe082);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.4s;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 1px;
+    }
 
-        .card:hover {
-            transform: translateY(-10px);
-        }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #ffc107aa;
+    }
 
-        .fraudulent {
-            background: linear-gradient(135deg, #ff4b4b, #ff0000);
-            color: #fff;
-        }
+    .result {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 40px;
+      justify-content: center;
+    }
 
-        .genuine {
-            background: linear-gradient(135deg, #28a745, #218838);
-            color: #fff;
-        }
+    .card {
+      flex: 1 1 280px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #ffc10722;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px #ffc10733;
+      transition: 0.3s ease;
+    }
 
-        .card h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
+    .card h3 {
+      font-size: 1.5rem;
+      color: #ffc107;
+      margin-bottom: 10px;
+    }
 
-        .card p {
-            font-size: 18px;
-            font-weight: bold;
-        }
+    .card p {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
 
-        @media (max-width: 768px) {
-            .form-group {
-                width: 100%;
-            }
+    .fraudulent {
+      background: linear-gradient(135deg, #ff1744, #d50000);
+      color: #fff;
+    }
 
-            .card {
-                width: 100%;
-            }
-        }
-    </style>
+    .genuine {
+      background: linear-gradient(135deg, #00e676, #00c853);
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .form-group {
+        flex: 1 1 100%;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>🚀 Financial Fraud Detection System</h1>
-</header>
+  <header>
+    <h1>⚡️ AI ML-Powered Fraud Detection System</h1>
+    <p class="tagline">Real-time transaction analysis backed by intelligent models</p>
+  </header>
 
-<div class="container">
+  <div class="container">
     <form id="fraud-form">
-        <div class="form-group">
-            <label for="amount">💰 Transaction Amount:</label>
-            <input type="number" step="0.01" id="amount" required>
-        </div>
+      <div class="form-group">
+        <label for="amount">💰 Transaction Amount:</label>
+        <input type="number" id="amount" step="0.01" required />
+      </div>
 
-        <div class="form-group">
-            <label for="risk_flag">⚠️ High-Risk Flag (0/1):</label>
-            <input type="number" min="0" max="1" id="risk_flag" required>
-        </div>
+      <div class="form-group">
+        <label for="risk_flag">⚠️ High-Risk Flag (0/1):</label>
+        <input type="number" id="risk_flag" min="0" max="1" required />
+      </div>
 
-        <div class="form-group">
-            <label for="balance_ratio">📊 Balance Ratio (0-1):</label>
-            <input type="number" step="0.01" min="0" max="1" id="balance_ratio" required>
-        </div>
+      <div class="form-group">
+        <label for="balance_ratio">📊 Balance Ratio (0-1):</label>
+        <input type="number" id="balance_ratio" min="0" max="1" step="0.01" required />
+      </div>
 
-        <div class="form-group">
-            <label for="verification_status">✅ Verification (0/1):</label>
-            <input type="number" min="0" max="1" id="verification_status" required>
-        </div>
+      <div class="form-group">
+        <label for="verification_status">✅ Verification (0/1):</label>
+        <input type="number" id="verification_status" min="0" max="1" required />
+      </div>
 
-        <div class="form-group">
-            <label for="prev_amount">🔁 Previous Amount:</label>
-            <input type="number" step="0.01" id="prev_amount" required>
-        </div>
+      <div class="form-group">
+        <label for="prev_amount">🔁 Previous Amount:</label>
+        <input type="number" id="prev_amount" step="0.01" required />
+      </div>
 
-        <div class="form-group">
-            <label for="time_since_last">⏱️ Time Since Last (hrs):</label>
-            <input type="number" step="0.01" id="time_since_last" required>
-        </div>
+      <div class="form-group">
+        <label for="time_since_last">⏱️ Time Since Last (hrs):</label>
+        <input type="number" id="time_since_last" step="0.01" required />
+      </div>
 
-        <div class="form-group">
-            <label for="merchant_reputation">🏪 Merchant Reputation (0/1):</label>
-            <input type="number" min="0" max="1" id="merchant_reputation" required>
-        </div>
+      <div class="form-group">
+        <label for="merchant_reputation">🏪 Merchant Reputation (0/1):</label>
+        <input type="number" id="merchant_reputation" min="0" max="1" required />
+      </div>
 
-        <div class="form-group">
-            <label for="credibility_score">🌟 Credibility Score (0-1):</label>
-            <input type="number" step="0.01" min="0" max="1" id="credibility_score" required>
-        </div>
+      <div class="form-group">
+        <label for="credibility_score">🌟 Credibility Score (0-1):</label>
+        <input type="number" id="credibility_score" min="0" max="1" step="0.01" required />
+      </div>
 
-        <div class="form-group">
-            <label for="location_anomaly">📍 Location Anomaly (0/1):</label>
-            <input type="number" min="0" max="1" id="location_anomaly" required>
-        </div>
+      <div class="form-group">
+        <label for="location_anomaly">📍 Location Anomaly (0/1):</label>
+        <input type="number" id="location_anomaly" min="0" max="1" required />
+      </div>
 
-        <div class="form-group">
-            <label for="freq_recent">🔄 Recent Frequency:</label>
-            <input type="number" step="0.01" id="freq_recent" required>
-        </div>
+      <div class="form-group">
+        <label for="freq_recent">🔄 Recent Frequency:</label>
+        <input type="number" id="freq_recent" step="0.01" required />
+      </div>
 
-        <button type="submit">🚀 Predict</button>
+      <button type="submit">🚀 Predict Fraud</button>
     </form>
 
     <div id="result" class="result"></div>
-</div>
+  </div>
 
-<script>
+  <script>
     const form = document.getElementById('fraud-form');
     const resultDiv = document.getElementById('result');
 
     form.addEventListener('submit', async (event) => {
-        event.preventDefault();
+      event.preventDefault();
 
-        const data = [
-            parseFloat(document.getElementById('amount').value),
-            parseInt(document.getElementById('risk_flag').value),
-            parseFloat(document.getElementById('balance_ratio').value),
-            parseInt(document.getElementById('verification_status').value),
-            parseFloat(document.getElementById('prev_amount').value),
-            parseFloat(document.getElementById('time_since_last').value),
-            parseInt(document.getElementById('merchant_reputation').value),
-            parseFloat(document.getElementById('credibility_score').value),
-            parseInt(document.getElementById('location_anomaly').value),
-            parseFloat(document.getElementById('freq_recent').value)
-        ];
+      const data = [
+        parseFloat(document.getElementById('amount').value),
+        parseInt(document.getElementById('risk_flag').value),
+        parseFloat(document.getElementById('balance_ratio').value),
+        parseInt(document.getElementById('verification_status').value),
+        parseFloat(document.getElementById('prev_amount').value),
+        parseFloat(document.getElementById('time_since_last').value),
+        parseInt(document.getElementById('merchant_reputation').value),
+        parseFloat(document.getElementById('credibility_score').value),
+        parseInt(document.getElementById('location_anomaly').value),
+        parseFloat(document.getElementById('freq_recent').value)
+      ];
 
-        resultDiv.innerHTML = `<p>⏳ Predicting...</p>`;
+      resultDiv.innerHTML = `<p>🔍 Analyzing...</p>`;
 
-        try {
-            const response = await fetch('http://localhost:5000/predict', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: [data] })
-            });
+      try {
+        const response = await fetch('http://localhost:5000/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: [data] })
+        });
 
-            const result = await response.json();
-            resultDiv.innerHTML = '';
+        const result = await response.json();
+        resultDiv.innerHTML = '';
 
-            Object.keys(result).forEach(model => {
-                const isFraud = result[model] === "Fraudulent";
-                const card = document.createElement('div');
-                card.classList.add('card', isFraud ? 'fraudulent' : 'genuine');
-                card.innerHTML = `<h3>${model}</h3><p>${result[model]}</p>`;
-                resultDiv.appendChild(card);
-            });
+        Object.keys(result).forEach(model => {
+          const isFraud = result[model] === "Fraudulent";
+          const card = document.createElement('div');
+          card.classList.add('card', isFraud ? 'fraudulent' : 'genuine');
+          card.innerHTML = `<h3>${model}</h3><p>${result[model]}</p>`;
+          resultDiv.appendChild(card);
+        });
 
-            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        resultDiv.scrollIntoView({ behavior: 'smooth' });
 
-        } catch (error) {
-            console.error('Error:', error);
-            resultDiv.innerHTML = `<p>❌ Network error. Please try again.</p>`;
-        }
+      } catch (error) {
+        console.error('Error:', error);
+        resultDiv.innerHTML = `<p>❌ Network error. Please try again.</p>`;
+      }
     });
-</script>
-
+  </script>
 </body>
 </html>
