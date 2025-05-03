@@ -1,21 +1,20 @@
-# Use official Python image
+
+# Base image
 FROM python:3.9
 
-# Set working directory inside the container
+# Set work directory
 WORKDIR /fraud_detection
 
-# Copy requirements and install dependencies
-COPY ./requirements.txt .
+# Copy requirements first to leverage caching
+COPY requirements.txt .
 
-# Install dependencies
+# Install dependencies (cached unless requirements.txt changes)
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the app and models separately to maintain correct structure
+# Copy the rest of your app
 COPY ./apps /fraud_detection/apps
 COPY ./models /fraud_detection/models
+COPY . .
 
-# Expose the Flask port
-EXPOSE 5000
-
-# Start the Flask app
-CMD ["python", "/fraud_detection/apps/app.py"]
+# Run the app
+CMD ["python", "apps/app.py"]
